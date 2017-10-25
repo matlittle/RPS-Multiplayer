@@ -12,7 +12,7 @@
 <body>
 
 	<div class="container-fluid" id="wrapper">
-		<div class="container">
+		<div class="container" id="main-container">
 			<div class="row" id="head-row">
 				<h1>Rock Paper Scissors</h1>
 				<h3>Battle Royale</h3>
@@ -46,16 +46,16 @@
 	<!-- Firebase -->
 	<script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
 	<script>
-	// Initialize Firebase
-	var config = {
-		apiKey: "AIzaSyDwNTnUpn-XTpt5vzq5prFY0sPYKZHtmSk",
-		authDomain: "rps-project-65d20.firebaseapp.com",
-		databaseURL: "https://rps-project-65d20.firebaseio.com",
-		projectId: "rps-project-65d20",
-		storageBucket: "",
-		messagingSenderId: "1010689628405"
-	};
-	firebase.initializeApp(config);
+		/* Initialize Firebase */
+		var config = {
+			apiKey: "AIzaSyDwNTnUpn-XTpt5vzq5prFY0sPYKZHtmSk",
+			authDomain: "rps-project-65d20.firebaseapp.com",
+			databaseURL: "https://rps-project-65d20.firebaseio.com",
+			projectId: "rps-project-65d20",
+			storageBucket: "",
+			messagingSenderId: "1010689628405"
+		};
+		firebase.initializeApp(config);
 	</script>
 	<!-- jQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

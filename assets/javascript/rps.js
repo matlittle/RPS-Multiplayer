@@ -9,9 +9,9 @@ var database = firebase.database();
 	// show waiting until another user joins.
 
 function playerJoining(el) {
-	var player = $(el).attr("id");
+	//var player = $(el).attr("id");
 
-	var username = usernamePrompt();
+	usernamePrompt();
 }
 
 function usernamePrompt(){
@@ -20,8 +20,8 @@ function usernamePrompt(){
 	var input = $("<input type='text' id='username-input'>");
 	var btn = $("<input type='button' id='username-btn' value='Join'>");
 
-	$(modal).append(label, input, btn);
-	$("#wrapper").append(modal);
+	$(modal).append(label, "<br>", input, btn);
+	$("#main-container").append($(modal).css("display", "block"));
 }
 
 // when second user joins, prompt both users with a rps choice. 
@@ -30,4 +30,6 @@ function usernamePrompt(){
 
 
 
-$(document).on("click", ".join-btn", playerJoining(this));
+$(document).on("click", ".join-btn", function() {
+	playerJoining(this);
+});
