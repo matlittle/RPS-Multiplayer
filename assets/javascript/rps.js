@@ -1,5 +1,6 @@
 // Get reference to the Firebase realtime database service
 var database = firebase.database();
+console.log(database);
 
 // initialize page, allow a user to "join" one of two available spots, and include a chat window at the bottom of the page
 
@@ -11,17 +12,45 @@ var database = firebase.database();
 function playerJoining(el) {
 	//var player = $(el).attr("id");
 
-	usernamePrompt();
+	usernamePrompt(el);
+
+	$("#username-btn").click(function() {
+		addPlayer($("#username-input").val().trim())
+	});
 }
 
-function usernamePrompt(){
-	var modal = $("<div class='modal' id='username-prompt'>");
+function usernamePrompt(el){
 	var label = $("<label id='username-label'>").text("Enter a Username");
 	var input = $("<input type='text' id='username-input'>");
 	var btn = $("<input type='button' id='username-btn' value='Join'>");
 
-	$(modal).append(label, "<br>", input, btn);
-	$("#main-container").append($(modal).css("display", "block"));
+	var parent = $(el).parent();
+	$(".join-btn").remove();
+	$(parent).append(label, "<br>", input, btn);
+}
+
+function addPlayer(name) {
+
+	database.ref(`/users/${name}`).once("value").then(function(data) {
+		if(data.val()){
+			loadPlayerData(data.val())
+		}else {
+			writePlayerData(name);
+		}
+	});
+	
+}
+
+function writePlayerData(user) {
+	database.ref(`/users/${user}`).set({
+		username: user,
+		wins: 0,
+		losses: 0
+	});
+}
+
+function loadPlayerData(user) {
+	console.log(user);
 }
 
 // when second user joins, prompt both users with a rps choice. 
