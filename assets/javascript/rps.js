@@ -1,30 +1,47 @@
 // Get reference to the Firebase realtime database service
 var database = firebase.database();
 
-var curr = {};
-
 // initialize page, allow a user to "join" one of two available spots, and include a chat window at the bottom of the page
+function loadCurrentGameState() {
+	database.ref('curr').on("value").then(function(currentData) {
+		console.log(currentData.val());
+		for(var player in currentData.val()) {
+			updatePlayer(player);
+		}
+	});
+}
+
+function updatePlayer(player) {
+	if(player.state === "none") {
+		addJoinBtn($(`#${player1}`));
+	}else if (player.state === "joining") {
+		addJoiningAlert($(`#${player1}`));
+	}
+}
+
+function addJoinBtn(el) {
+
+}
 
 
 // when user clicks an available spot, promt them for a username
 	// after entering a username, add that user to firebase rt db
 	// show waiting until another user joins.
-	function getUsername(el) {
-	//var player = $(el).attr("id");
-
+function getUsername(el) {
 	usernamePrompt(el);
 
 	var playerNum = $(el).attr("data-player");
+
+	updateState(playerNum, "joining");
 
 	$("#username-btn").click(function() {
 		var input = $("#username-input").val().trim();
 
 		if(input.length > 0) {
-			$(`#player-${playerNum} > div`).empty();
+			$(`#player${playerNum} > div`).empty();
 			checkIfNewPlayer(input, playerNum);
 		}
 	});
-
 
 	function usernamePrompt(el){
 		var label = $("<label id='username-label'>").text("Enter your Username");
@@ -38,29 +55,29 @@ var curr = {};
 }
 
 function checkIfNewPlayer(name, num) {
-	var checkUser = database.ref(`users/${name}`);
+	database.ref(`users/${name}`).transaction(
+		function(currentData) {
+			if(currentData === null) {
+				return {
+					username: name,
+					wins: 0,
+					losses: 0
+				};
+			}else {
+				return;
+			}
+		}, function(error, committed, currentData) {
+			if(error) {
+				console.log("Error: ", error);
+			}else if(!committed) {
+				console.log("Transaction aborted, user exists");
+			}else if(commited) {
+				console.log("Transaction complete, user created");
+			}
 
-	checkUser.transaction( function(currentData) {
-		if(currentData === null) {
-			console.log("user test");
-			return {
-				username: name,
-				wins: 0,
-				losses: 0
-			};
-		}else {
-			console.log("user exists");
-			return;
+			addPlayerToGame(currentData.val(), num);
 		}
-	}, function(error, committed, snapshot) {
-		if(error) {
-			console.log("Error: ", error);
-		}else if(!committed) {
-			console.log("transaction aborted");
-		}
-		console.log("Data: ", snapshot.val());
-		addPlayerToGame(snapshot.val(), num);
-	});
+	);
 }
 
 function addPlayerToGame(userObj, num) {
@@ -71,21 +88,30 @@ function addPlayerToGame(userObj, num) {
 
 	$(score).append(wins, losses);
 
-	$(`#player-${num} > div`).append(header, score);
+	$(`#player${num}`).append(header, score);
 
-	updateState("players", 1);
+	updateState(num, "active");
 }
 
-function updateState(prop, change) {
-	if(prop === "players") {
-		var playersRef = database.ref("curr/state/players");
-		playersRef.transaction(function(currentData) {
-			return currentData += 1;
-		});
-	}else {
-		// for data other than num players
-		console.log("prop given not players");
-	}
+function updateState(playerNum, newState) {
+	database.ref(`curr/player${playerNum}/state`).transaction(
+		function(currentData){
+			console.log(currentData);
+			if(currentData === "none" || currentData === null) {
+				return newState;
+			}else if(currentData === "joining" && newState === "active") {
+				return newState;
+			}else {
+				return;
+			}
+		}, function(error, committed, currentData) {
+			if(error) {
+				console.log("Error: ", error);
+			}else if(!committed) {
+				console.log("Transaction aborted. Another player already joining or active.");
+			}
+		}
+	);
 }
 
 // when second user joins, prompt both users with a rps choice. 
@@ -94,6 +120,6 @@ function updateState(prop, change) {
 
 
 
-	$(document).on("click", ".join-btn", function() {
-		getUsername(this);
-	});
+$(document).on("click", ".join-btn", function() {
+	getUsername(this);
+});
