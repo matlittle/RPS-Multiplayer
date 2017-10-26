@@ -13,6 +13,7 @@
 	border: 4px solid black;
 	margin: auto;
 	text-align: center;
+	position: relative;
 }
 
 #chat-row {
@@ -26,18 +27,26 @@
 
 .player-head {
 	position: absolute;
-	top: 15px;
+	top: 10px;
+	width: 100%;
+	margin: 0;
+	text-align: center;
 }
 
 .score {
 	position: absolute;
 	bottom: 5px;
+	width: 100%;
+	height: 1.5em;
+	margin: 0;
 }
 
 .wins {
-	text-align: left;
+	position: absolute;
+	left: 10px;
 }
 
 .losses {
-	text-align: right;
+	position: absolute;
+	right: 10px;
 }

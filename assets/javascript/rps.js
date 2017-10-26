@@ -9,20 +9,7 @@ var curr = {};
 // when user clicks an available spot, promt them for a username
 	// after entering a username, add that user to firebase rt db
 	// show waiting until another user joins.
-
-
-
-function usernamePrompt(el){
-	var label = $("<label id='username-label'>").text("Enter your Username");
-	var input = $("<input type='text' id='username-input'>");
-	var btn = $("<input type='button' id='username-btn' value='Join'>");
-
-	var parent = $(el).parent();
-	$(".join-btn").remove();
-	$(parent).append(label, "<br>", input, btn);
-}
-
-function playerJoining(el) {
+function getUsername(el) {
 	//var player = $(el).attr("id");
 
 	usernamePrompt(el);
@@ -37,6 +24,17 @@ function playerJoining(el) {
 			checkIfNewPlayer(input, playerNum);
 		}
 	});
+
+
+	function usernamePrompt(el){
+		var label = $("<label id='username-label'>").text("Enter your Username");
+		var input = $("<input type='text' id='username-input'>");
+		var btn = $("<input type='button' id='username-btn' value='Join'>");
+
+		var parent = $(el).parent();
+		$(".join-btn").remove();
+		$(parent).append(label, "<br>", input, btn);
+	}
 }
 
 function checkIfNewPlayer(name, num) {
@@ -70,6 +68,20 @@ function addPlayerToGame(userObj, num) {
 	$(score).append(wins, losses);
 
 	$(`#player-${num} > div`).append(header, score);
+
+	updateState("players", 1);
+}
+
+function updateState(prop, change) {
+	if(typeof change === "number") {
+		database.ref(`/curr/state/${prop}`).once("value")
+			.then(function(data) {
+				data += change;
+				database.ref(`/curr/state/${prop}`).set(data);
+			})
+	}else {
+
+	}
 }
 
 // when second user joins, prompt both users with a rps choice. 
@@ -79,5 +91,5 @@ function addPlayerToGame(userObj, num) {
 
 
 $(document).on("click", ".join-btn", function() {
-	playerJoining(this);
+	getUsername(this);
 });
