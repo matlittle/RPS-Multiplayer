@@ -24,3 +24,20 @@
 	height: 150px;
 }
 
+.player-head {
+	position: absolute;
+	top: 15px;
+}
+
+.score {
+	position: absolute;
+	bottom: 5px;
+}
+
+.wins {
+	text-align: left;
+}
+
+.losses {
+	text-align: right;
+}
