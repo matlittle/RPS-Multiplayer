@@ -9,7 +9,7 @@ var curr = {};
 // when user clicks an available spot, promt them for a username
 	// after entering a username, add that user to firebase rt db
 	// show waiting until another user joins.
-function getUsername(el) {
+	function getUsername(el) {
 	//var player = $(el).attr("id");
 
 	usernamePrompt(el);
@@ -38,25 +38,29 @@ function getUsername(el) {
 }
 
 function checkIfNewPlayer(name, num) {
-	database.ref(`/users/${name}`).once("value").then(function(data) {
-		if(data.val()){
-			addPlayerToGame(data.val(), num);
+	var checkUser = database.ref(`users/${name}`);
+
+	checkUser.transaction( function(currentData) {
+		if(currentData === null) {
+			console.log("user test");
+			return {
+				username: name,
+				wins: 0,
+				losses: 0
+			};
 		}else {
-			writePlayerData(name, num);
+			console.log("user exists");
+			return;
 		}
+	}, function(error, committed, snapshot) {
+		if(error) {
+			console.log("Error: ", error);
+		}else if(!committed) {
+			console.log("transaction aborted");
+		}
+		console.log("Data: ", snapshot.val());
+		addPlayerToGame(snapshot.val(), num);
 	});
-}
-
-function writePlayerData(user, num) {
-	var playerData = {
-		username: user,
-		wins: 0,
-		losses: 0
-	}
-
-	database.ref(`/users/${user}`).set(playerData);
-
-	addPlayerToGame(playerData, num);
 }
 
 function addPlayerToGame(userObj, num) {
@@ -73,14 +77,14 @@ function addPlayerToGame(userObj, num) {
 }
 
 function updateState(prop, change) {
-	if(typeof change === "number") {
-		database.ref(`/curr/state/${prop}`).once("value")
-			.then(function(data) {
-				data += change;
-				database.ref(`/curr/state/${prop}`).set(data);
-			})
+	if(prop === "players") {
+		var playersRef = database.ref("curr/state/players");
+		playersRef.transaction(function(currentData) {
+			return currentData += 1;
+		});
 	}else {
-
+		// for data other than num players
+		console.log("prop given not players");
 	}
 }
 
@@ -90,6 +94,6 @@ function updateState(prop, change) {
 
 
 
-$(document).on("click", ".join-btn", function() {
-	getUsername(this);
-});
+	$(document).on("click", ".join-btn", function() {
+		getUsername(this);
+	});
