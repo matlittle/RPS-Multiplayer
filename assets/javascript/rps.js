@@ -1,26 +1,53 @@
 // Get reference to the Firebase realtime database service
 var database = firebase.database();
 
+loadCurrentGameState();
+
 // initialize page, allow a user to "join" one of two available spots, and include a chat window at the bottom of the page
 function loadCurrentGameState() {
-	database.ref('curr').on("value").then(function(currentData) {
+	database.ref('curr').on("value", function(currentData) {
 		console.log(currentData.val());
 		for(var player in currentData.val()) {
-			updatePlayer(player);
+			updatePlayer(player, currentData.val()[player]);
 		}
 	});
 }
 
-function updatePlayer(player) {
-	if(player.state === "none") {
-		addJoinBtn($(`#${player1}`));
-	}else if (player.state === "joining") {
-		addJoiningAlert($(`#${player1}`));
+function updatePlayer(pNum, pObj) {
+	console.log(pNum);
+	console.log(pObj);
+
+
+	if(pObj.state === "none") {
+		addJoinBtn($(`#${pNum}`));
+	}else if (pObj.state === "joining") {
+		addJoiningAlert($(`#${pNum}`));
+	}else {
+		addPlayerData($(`#${pNum}`), pObj)
 	}
 }
 
 function addJoinBtn(el) {
+	console.log($(el));
+	var joinBtn = $("<p class='join-btn'>").text("Click to join");
+	$(joinBtn).attr("data-player", $(el).attr("id"));
 
+	$(el).append(joinBtn);
+}
+
+function addJoiningAlert(el) {
+
+}
+
+function addPlayerData(el) {
+	/*var header = $("<h2 class='player-head'>").text(userObj.username);
+	var score = $("<p class='score'>")
+	var wins = $("<span class='wins'>").text(`Wins: ${userObj.wins}`);
+	var losses = $("<span class='losses'>").text(`Losses: ${userObj.losses}`);
+
+	$(score).append(wins, losses);
+
+	$(`#player${num}`).append(header, score);*/
 }
 
 
