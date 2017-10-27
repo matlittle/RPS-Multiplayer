@@ -19,27 +19,40 @@ function updatePlayer(pNum, pObj) {
 
 
 	if(pObj.state === "none") {
-		addJoinBtn($(`#${pNum}`));
+		addJoinBtn( $(`#${pNum}`) );
 	}else if (pObj.state === "joining") {
-		addJoiningAlert($(`#${pNum}`));
+		addJoiningAlert( $(`#${pNum}`) );
 	}else {
-		addPlayerData($(`#${pNum}`), pObj)
+		addPlayerData( $(`#${pNum}`), pObj)
 	}
 }
 
 function addJoinBtn(el) {
-	console.log($(el));
-	var joinBtn = $("<p class='join-btn'>").text("Click to join");
-	$(joinBtn).attr("data-player", $(el).attr("id"));
-
+	var joinBtn = $(`<p class='join-btn' data-player="${$(el).attr("id")}">`);
+	$(joinBtn).text("Click to join");
+	$(el).empty();
 	$(el).append(joinBtn);
 }
 
 function addJoiningAlert(el) {
-
+	var joinAlert = $("<p class='join-alert'>").text("Player joining...");
+	$(el).empty();
+	$(el).append(joinAlert);
 }
 
-function addPlayerData(el) {
+function addPlayerData(el, pObj) {
+	database.ref(`users/${pObj.user}`).once("value").then( function(user) {
+		var header = $("<h2 class='player-head'>").text(user.username);
+		var score = $("<p class='score'>")
+		var wins = $("<span class='wins'>").text(`Wins: ${user.wins}`);
+		var losses = $("<span class='losses'>").text(`Losses: ${user.losses}`);
+
+		$(score).append(wins, losses);
+
+		$(el).empty();
+		$(el).append(header, score);
+	});
+
 	/*var header = $("<h2 class='player-head'>").text(userObj.username);
 	var score = $("<p class='score'>")
 	var wins = $("<span class='wins'>").text(`Wins: ${userObj.wins}`);
