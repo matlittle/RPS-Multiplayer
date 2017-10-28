@@ -2,6 +2,7 @@
 var database = firebase.database();
 var joining = false;
 var currPlayer = "";
+var currUsername = "";
 var choiceArr = ["Rock", "Paper", "Scissors"];
 
 loadCurrentGameState();
@@ -91,7 +92,12 @@ function addChoices(player) {
 				if(themRef.choice !== "") {
 					$("#board").append($("<p>").text("Other player chose"));
 				}
-			}
+
+			}else if(themRef.choice === "") {
+				$("#board").append($("<p>").text("Waiting on other player"));
+			}else {
+				determineWinner(meRef.choice, themRef.choice);
+			}	
 
 		}else {
 			var choiceEl = $("<p>").text("Waiting for another player to join");
@@ -105,6 +111,67 @@ function choiceClicked(el) {
 	var choice = $(el).text();
 
 	database.ref(`curr/${currPlayer}/choice`).set(choice);
+}
+
+function determineWinner(mine, theirs) {
+	if(mine === theirs) {
+		tieGame();
+	}else if(mine === "Rock") {
+		if(theirs === "Paper") {
+			lostGame();
+		}else if(theirs === "Scissors") {
+			wonGame();
+		}
+	} else if(mine === "Paper") {
+		if(theirs === "Rock") {
+			wonGame();
+		}else if(theirs === "Scissors") {
+			lostGame();
+		}
+	}else if(mine === "Scissors"){
+		if(theirs === "Rock") {
+			lostGame();
+		}else if(theirs === "Paper") {
+			wonGame();
+		}
+	}
+}
+
+function tieGame() {
+	$("#board").empty();
+	$("#board").append($("<p>").text("Tie Game!"));
+
+	setTimeout(resetGame, 5 * 1000);
+}
+
+function wonGame() {
+	$("#board").empty();
+	$("#board").append($("<p>").text("You Won!"));
+
+	database.ref(`users/${currUsername}/wins`).once("value").then(function(data) {
+		var newCount = data.val() + 1;
+		database.ref(`users/${currUsername}/wins`).set(newCount);
+	});
+
+	setTimeout(resetGame, 5 * 1000);
+}
+
+function lostGame() {
+	$("#board").empty();
+	$("#board").append($("<p>").text("You Lost!"));
+
+	database.ref(`users/${currUsername}/losses`).once("value").then(function(data) {
+		var newCount = data.val() + 1;
+		database.ref(`users/${currUsername}/losses`).set(newCount);
+	});
+
+	setTimeout(resetGame, 5 * 1000);
+}
+
+function resetGame() {
+	database.ref(`curr/player1/choice`).set("");
+	database.ref(`curr/player2/choice`).set("");
+	$("#board").empty();
 }
 
 
@@ -140,6 +207,7 @@ function getUsername(el) {
 
 		if(input.length > 0) {
 			$(`#player${playerNum} > div`).empty();
+			currUsername = input;
 			checkIfNewPlayer(input, playerNum);
 		}
 	}
@@ -202,6 +270,11 @@ function loadDisconnectMethods() {
 		state: "none",
 		user: ""
 	});
+
+	database.ref(`curr/player1/choice`).set("");
+	database.ref(`curr/player2/choice`).set("");
+
+	$("#board").empty();
 }
 
 // when second user joins, prompt both users with a rps choice. 
