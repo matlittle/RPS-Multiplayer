@@ -230,7 +230,7 @@ function checkIfNewPlayer(name, player) {
 				console.log("Error: ", error);
 			}else if(!committed) {
 				console.log("Transaction aborted, user exists");
-			}else if(commited) {
+			}else if(committed) {
 				console.log("Transaction complete, user created");
 			}
 
