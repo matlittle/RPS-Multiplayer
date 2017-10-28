@@ -1,6 +1,8 @@
 // Get reference to the Firebase realtime database service
 var database = firebase.database();
-var joining = false, currPlayer = "";
+var joining = false;
+var currPlayer = "";
+var choiceArr = ["Rock", "Paper", "Scissors"];
 
 loadCurrentGameState();
 
@@ -10,8 +12,6 @@ loadCurrentGameState();
 function loadCurrentGameState() {
 	database.ref('curr').on("value", function(currentData) {
 		for(var player in currentData.val()) {
-			console.log("Current State change triggered");
-			console.log("Current Data: ", currentData.val());
 			updatePlayer(player, currentData.val()[player]);
 		}
 	});
@@ -24,7 +24,6 @@ function updatePlayer(player, pObj) {
 		addJoiningAlert( player );
 	}else if (pObj.state === "active"){
 		addPlayerData( player, pObj);
-		addChoices(player);
 	}
 }
 
@@ -34,6 +33,8 @@ function addJoinBtn(player) {
 		$(joinBtn).text("Click to join");
 		$(`#${player}`).empty();
 		$(`#${player}`).append(joinBtn);
+	}else {
+		$(`#${player}`).empty();
 	}
 }
 
@@ -57,32 +58,53 @@ function addPlayerData(player, pObj) {
 
 		$(`#${player}`).empty();
 		$(`#${player}`).append(header, choices, score);
+
+		if(player === currPlayer) {
+			addChoices(currPlayer);
+		}
 	});
 }
 
 function addChoices(player) {
-
 	database.ref("curr").once("value").then( function(currentData) {
-		var p1Ref = currentData.val().player1;
-		var p2Ref = currentData.val().player2;
+		if(currPlayer === "player1") {
+			var meRef = currentData.val().player1;
+			var themRef = currentData.val().player2;
+		} else {
+			var meRef = currentData.val().player2;
+			var themRef = currentData.val().player1;
+		}
 
-		if(p1Ref.state === "active" && p2Ref.state === "active") {
-			var choices = $("<ul class='choice-list'>");
-			var choiceArr = ["Rock", "Paper", "Scissors"];
 
-			choiceArr.forEach( function(choice) {
-				var item = $("<li class='choice-item'>").text(choice);
-				$(choices).append(item);
-			});
+		if(meRef.state === "active" && themRef.state === "active") {
+			if(meRef.choice === "") {
+				var choices = $("<ul class='choice-list'>");
 
-			$(`#${player} > .choices`).append(choices);
+				choiceArr.forEach( function(choice) {
+					var item = $("<li class='choice-item'>").text(choice);
+					$(choices).append(item);
+				});
+
+				$(`#${currPlayer} > .choices`).empty();
+				$(`#${currPlayer} > .choices`).append(choices);
+
+				if(themRef.choice !== "") {
+					$("#board").append($("<p>").text("Other player chose"));
+				}
+			}
 
 		}else {
 			var choiceEl = $("<p>").text("Waiting for another player to join");
 
-			$(`#${player} > .choices`).append(choiceEl);
+			$(`#${currPlayer} > .choices`).append(choiceEl);
 		}
 	});
+}
+
+function choiceClicked(el) {
+	var choice = $(el).text();
+
+	database.ref(`curr/${currPlayer}/choice`).set(choice);
 }
 
 
@@ -190,4 +212,8 @@ function loadDisconnectMethods() {
 
 $(document).on("click", ".join-btn", function() {
 	getUsername(this);
+});
+
+$(document).on("click", ".choice-item", function() {
+	choiceClicked(this);
 });
