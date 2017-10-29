@@ -103,6 +103,7 @@ function addChoices(player) {
 			var choiceEl = $("<p>").text("Waiting for another player to join");
 
 			$(`#${currPlayer} > .choices`).append(choiceEl);
+			$("#board").empty();
 		}
 	});
 }
