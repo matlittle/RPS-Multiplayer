@@ -193,9 +193,15 @@ function getUsername(el) {
 
 	$("#username-btn").click(usernameBtnClicked);
 
+	$("#username-input").keypress(function(e){
+		if(e.keyCode==13){ 
+			$("#username-btn").click();
+		}
+	});
+
 	function addUsernameForm(el){
 		var label = $("<label id='username-label'>").text("Enter your Username");
-		var input = $("<input type='text' id='username-input'>");
+		var input = $("<input type='text' id='username-input' autofocus>");
 		var btn = $("<input type='button' id='username-btn' value='Join'>");
 
 		var parent = $(el).parent();
