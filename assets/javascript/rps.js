@@ -29,12 +29,12 @@ function loadCurrentGameState() {
 		}
 	});
 
-	database.ref('chat').on("child_added", function(message) {
+	database.ref('chat').on("child_added", function(data) {
 		var line = $("<p class='chat-line'>");
-		var user = $("<span class='chat-user'>").text(message.val().user);
-		var message = $("<span class='chat-msg'>").text(message.val().message);
+		var text = $("<span class='chat-msg'>").text(data.val().message);
+		var user = $("<span class='chat-user'>").text(data.val().user);
 
-		$(line).append(user, message);
+		$(line).append(user, ": ", text);
 		$("#chat-area").append(line);
 	});
 }
@@ -266,6 +266,7 @@ function checkIfNewPlayer(name, player) {
 function addPlayerToGame(userObj, player) {
 	database.ref(`curr/${player}/user`).set(userObj.username);
 	updateState(player, "active");
+	activateChat();
 }
 
 function updateState(player, newState) {
@@ -301,13 +302,21 @@ function loadDisconnectMethods() {
 	$("#board").empty();
 }
 
-function chatBtnClicked() {
+function chatBtnClicked(event) {
+	event.preventDefault();
 	var message = $("#chat-input").val().trim();
+
+	$("#chat-input").val("");
 
 	database.ref("/chat/").push({
 		user: currUsername,
 		message: message
 	});
+}
+
+function activateChat() {
+	$("#chat-input").removeAttr("disabled");
+	$("#chat-btn").removeAttr("disabled");
 }
 
 
@@ -322,4 +331,12 @@ $(document).on("click", ".choice-item", function() {
 	choiceClicked(this);
 });
 
-$("#chat-btn").click(chatBtnClicked);
+$("#chat-btn").click( function(event) {
+	chatBtnClicked(event);
+});
+
+$("#chat-input").keypress(function(event){
+	if(event.keyCode==13){ 
+		chatBtnClicked(event);
+	}
+});

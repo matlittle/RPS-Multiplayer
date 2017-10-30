@@ -32,10 +32,12 @@
 	width: 100%;
 	height: 150px;
 	resize: vertical;
+	overflow: auto;
+	border: 2px solid grey;
 }
 
-#chat-area:focus {
-	outline: none;
+.chat-line {
+	margin-bottom: 2px;
 }
 
 #chat-input-group {
@@ -46,8 +48,16 @@
 	width: 85%;
 }
 
+#chat-input:focus {
+	outline: none;
+}
+
 #chat-btn {
 	width: 15%;
+}
+
+.chat-user {
+	font-style: italic;
 }
 
 .player-head {
