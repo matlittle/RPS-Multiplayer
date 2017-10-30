@@ -1,3 +1,7 @@
+#wrapper {
+	min-width: 630px;
+}
+
 #main-container {
 	position: relative;
 }
@@ -27,7 +31,23 @@
 #chat-area {
 	width: 100%;
 	height: 150px;
-	border: 2px solid grey;
+	resize: vertical;
+}
+
+#chat-area:focus {
+	outline: none;
+}
+
+#chat-input-group {
+	width: 100%;
+}
+
+#chat-input {
+	width: 85%;
+}
+
+#chat-btn {
+	width: 15%;
 }
 
 .player-head {

@@ -1,3 +1,15 @@
+// Initialize Firebase 
+var config = {
+	apiKey: "AIzaSyDwNTnUpn-XTpt5vzq5prFY0sPYKZHtmSk",
+	authDomain: "rps-project-65d20.firebaseapp.com",
+	databaseURL: "https://rps-project-65d20.firebaseio.com",
+	projectId: "rps-project-65d20",
+	storageBucket: "",
+	messagingSenderId: "1010689628405"
+};
+firebase.initializeApp(config);
+
+
 // Get reference to the Firebase realtime database service
 var database = firebase.database();
 var joining = false;
@@ -15,6 +27,15 @@ function loadCurrentGameState() {
 		for(var player in currentData.val()) {
 			updatePlayer(player, currentData.val()[player]);
 		}
+	});
+
+	database.ref('chat').on("child_added", function(message) {
+		var line = $("<p class='chat-line'>");
+		var user = $("<span class='chat-user'>").text(message.val().user);
+		var message = $("<span class='chat-msg'>").text(message.val().message);
+
+		$(line).append(user, message);
+		$("#chat-area").append(line);
 	});
 }
 
@@ -175,10 +196,6 @@ function resetGame() {
 	$("#board").empty();
 }
 
-
-// when user clicks an available spot, promt them for a username
-	// after entering a username, add that user to firebase rt db
-	// show waiting until another user joins.
 function getUsername(el) {
 	addUsernameForm(el);
 
@@ -284,11 +301,18 @@ function loadDisconnectMethods() {
 	$("#board").empty();
 }
 
-// when second user joins, prompt both users with a rps choice. 
-	// after both users click, determine winner based on choices.
-	// increment user's score based on win/loss
+function chatBtnClicked() {
+	var message = $("#chat-input").val().trim();
+
+	database.ref("/chat/").push({
+		user: currUsername,
+		message: message
+	});
+}
 
 
+
+// CLICK LISTENERS
 
 $(document).on("click", ".join-btn", function() {
 	getUsername(this);
@@ -297,3 +321,5 @@ $(document).on("click", ".join-btn", function() {
 $(document).on("click", ".choice-item", function() {
 	choiceClicked(this);
 });
+
+$("#chat-btn").click(chatBtnClicked);
