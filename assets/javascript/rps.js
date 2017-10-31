@@ -30,12 +30,7 @@ function loadCurrentGameState() {
 	});
 
 	database.ref('chat').on("child_added", function(data) {
-		var line = $("<p class='chat-line'>");
-		var text = $("<span class='chat-msg'>").text(data.val().message);
-		var user = $("<span class='chat-user'>").text(data.val().user);
-
-		$(line).append(user, ": ", text);
-		$("#chat-area").append(line);
+		appendChatLine(data.val());
 	});
 }
 
@@ -253,7 +248,7 @@ function checkIfNewPlayer(name, player) {
 			if(error) {
 				console.log("Error: ", error);
 			}else if(!committed) {
-				console.log("Transaction aborted, user exists");
+				console.log("Transaction stopped, user exists");
 			}else if(committed) {
 				console.log("Transaction complete, user created");
 			}
@@ -283,7 +278,7 @@ function updateState(player, newState) {
 			if(error) {
 				console.log("Error: ", error);
 			}else if(!committed) {
-				console.log("Transaction aborted. Another player already joining or active.");
+				console.log("Transaction stopped. Another player already joining or active.");
 			}
 		}
 	);
@@ -319,6 +314,22 @@ function activateChat() {
 	$("#chat-btn").removeAttr("disabled");
 }
 
+function appendChatLine(line) {
+	var newLine = $("<p class='chat-line'>");
+	var text = $("<span class='chat-msg'>").text(line.message);
+	var user = $("<span class='chat-user'>").text(line.user);
+
+	$(newLine).append(user, ": ", text);
+	$("#chat-area").append(newLine);
+
+	scrollChat();
+}
+
+function scrollChat() {
+	var chatDiv = document.getElementById("chat-area");
+	$("#chat-area").scrollTop(chatDiv.scrollHeight);
+}
+
 
 
 // CLICK LISTENERS
@@ -340,3 +351,5 @@ $("#chat-input").keypress(function(event){
 		chatBtnClicked(event);
 	}
 });
+
+setInterval(scrollChat, 1);

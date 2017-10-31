@@ -33,6 +33,7 @@
 	height: 150px;
 	resize: vertical;
 	overflow: auto;
+	padding: 2px;
 	border: 2px solid grey;
 }
 
