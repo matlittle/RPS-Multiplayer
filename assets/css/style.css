@@ -4,10 +4,12 @@
 
 #wrapper {
 	min-width: 780px;
+	height: 100%;
 }
 
 #main-container {
 	position: relative;
+	height: 100%;
 }
 
 body {
@@ -27,6 +29,19 @@ body {
 #head-row {
 	text-align: center;
 	margin-bottom: 10px;
+	min-height: 112px;
+	height: 15%;
+}
+
+#game-row {
+	min-height: 350px;
+	height: 45%;
+}
+
+#chat-row {
+	margin: 10px auto 0;
+	min-height: 190px;
+	height: 40%;
 }
 
 .player, #board {
@@ -106,9 +121,13 @@ body {
 	margin: 10px auto 0;
 }
 
+#chat-col {
+	height: 100%;
+}
+
 #chat-area {
 	width: 100%;
-	height: 150px;
+	height: 80%;
 	background-image: url("../images/scroll.jpg");
 	color: black;
 	font-size: 1.5em;
