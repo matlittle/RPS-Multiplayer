@@ -5,17 +5,20 @@
 
 	<!-- Latest compiled and minified Bootstrap CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css?family=IM+Fell+English+SC" rel="stylesheet">
 	<!-- Custom Stylesheet -->
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
 </head>
 <body>
 
+	<div id="background"></div>
+
 	<div class="container-fluid" id="wrapper">
 		<div class="container" id="main-container">
 			<div class="row" id="head-row">
-				<h1>Rock Paper Scissors</h1>
-				<h3>Battle Royale</h3>
+				<img src="assets/images/title.png">
 			</div>
 			<div class="row" id="game-row">
 				<div class="col-xs-4">
@@ -31,7 +34,7 @@
 			<div class="row" id="chat-row">
 				<div class="col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
 					<div id="chat-area"></div>
-					<form class="form-inline">
+					<form class="form-inline" autocomplete="off">
 						<div class="input-group" id="chat-input-group">
 							<input type="text" name="chat-input" id="chat-input" placeholder="Message..." disabled>
 							<input type="button" name="chat-btn" id="chat-btn" value="Send" disabled>

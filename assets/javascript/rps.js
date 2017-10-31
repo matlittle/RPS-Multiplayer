@@ -47,7 +47,7 @@ function updatePlayer(player, pObj) {
 function addJoinBtn(player) {
 	if(!joining) {
 		var joinBtn = $(`<p class='join-btn' data-player="${player}">`);
-		$(joinBtn).text("Click to join");
+		$(joinBtn).text("Click to Join");
 		$(`#${player}`).empty();
 		$(`#${player}`).append(joinBtn);
 	}else {
@@ -74,7 +74,7 @@ function addPlayerData(player, pObj) {
 		$(score).append(wins, losses);
 
 		$(`#${player}`).empty();
-		$(`#${player}`).append(header, choices, score);
+		$(`#${player}`).append(header, score, choices);
 
 		if(player === currPlayer) {
 			addChoices(currPlayer);
@@ -218,7 +218,7 @@ function getUsername(el) {
 
 		var parent = $(el).parent();
 		$(".join-btn").remove();
-		$(parent).append(label, "<br>", input, btn);
+		$(parent).append(label, "<br>", input, "<br>", btn);
 	}
 
 	function usernameBtnClicked() {
@@ -301,6 +301,8 @@ function chatBtnClicked(event) {
 	event.preventDefault();
 	var message = $("#chat-input").val().trim();
 
+	if(message === "") return;
+
 	$("#chat-input").val("");
 
 	database.ref("/chat/").push({
@@ -330,6 +332,14 @@ function scrollChat() {
 	$("#chat-area").scrollTop(chatDiv.scrollHeight);
 }
 
+function chatResizing() {
+	var resizing = setInterval(scrollChat, 1);
+
+	$(document).mouseup(function() {
+		clearInterval(resizing);
+		$(document).mouseup(function() {});
+	})
+}
 
 
 // CLICK LISTENERS
@@ -352,4 +362,4 @@ $("#chat-input").keypress(function(event){
 	}
 });
 
-setInterval(scrollChat, 1);
+$("#chat-area").mousedown(chatResizing);

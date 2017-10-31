@@ -1,27 +1,99 @@
+* {
+	font-family: 'IM Fell English SC', serif;
+}
+
 #wrapper {
-	min-width: 630px;
+	min-width: 780px;
 }
 
 #main-container {
 	position: relative;
 }
 
+#background {
+	background-image: url("../images/background.jpg");
+	background-size: cover;
+	background-attachment: fixed;
+	background-repeat: none;
+	background-position: center center; 
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	opacity: 1;
+}
+
 #head-row {
 	text-align: center;
-	margin-bottom: 30px;
+	margin-bottom: 10px;
 }
 
 .player, #board {
-	width: 200px;
-	height: 200px;
-	border: 4px solid black;
+	width: 300px;
+	height: 400px;
 	margin: auto;
 	text-align: center;
 	position: relative;
+	font-weight: 900;
+}
+
+#player1 {
+	background-image: url("../images/shield1.png");
+	color: #13103d;
+	text-shadow: -1px 0 0 white, 0 1px 0 white, 1px 0 0 white, 0 -1px 0 white;
+}
+
+#player2 {
+	background-image: url("../images/shield2.png");
+	color: #621010;
+	text-shadow: -1px 0 0 white, 0 1px 0 white, 1px 0 0 white, 0 -1px 0 white;
+}
+
+#player1, #player2 {
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.join-btn {
+	line-height: 350px;
+	font-size: 2.5em;
+	margin: 0;
+	font-weight: 600;
+}
+
+.join-btn:hover {
+	cursor: pointer;
+}
+
+#username-label {
+	margin-top: 75px;
+	font-size: 1.75em;
+	width: 200px;
+}
+
+#username-input {
+	background-color: #6a645d;
+	font-size: 1.75em;
+	width: 175px;
+	margin: auto;
+	border: 1px solid #1c1611;
+	padding: 1px;
+	text-shadow: -1px 0 0 white, 0 1px 0 white, 1px 0 0 white, 0 -1px 0 white;
 }
 
 #username-btn {
-	margin-top: 10px;
+	font-size: 1.75em;
+	text-shadow: -1px 0 0 white, 0 1px 0 white, 1px 0 0 white, 0 -1px 0 white;
+	margin-top: 20px;
+	background: none;
+	border: none;
+}
+
+#username-input:focus,
+#username-btn:focus {
+	outline: none;
 }
 
 #chat-row {
@@ -31,6 +103,7 @@
 #chat-area {
 	width: 100%;
 	height: 150px;
+	background-color: white;
 	resize: vertical;
 	overflow: auto;
 	padding: 2px;
@@ -62,19 +135,18 @@
 }
 
 .player-head {
-	position: absolute;
-	top: 10px;
 	width: 100%;
-	margin: 0;
+	margin: auto;
 	text-align: center;
+	font-size: 3em;
+	padding-top: 60px;
 }
 
 .choices {
-	position: absolute;
-	top: 60px;
-	width: 100%;
-	margin: 0;
+	width: 250px;
+	margin: auto;
 	text-align: center;
+	font-size: 2em;
 }
 
 .choice-list {
@@ -83,11 +155,12 @@
 }
 
 .score {
-	position: absolute;
-	bottom: 5px;
-	width: 100%;
+	position: relative;
+	width: 250px;
 	height: 1.5em;
-	margin: 0;
+	margin: auto;
+	margin-bottom: 20px;
+	font-size: 2em;
 }
 
 .wins {
