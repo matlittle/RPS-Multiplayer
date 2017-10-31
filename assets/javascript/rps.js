@@ -158,7 +158,7 @@ function tieGame() {
 	$("#board").empty();
 	$("#board").append($("<p>").text("Tie Game!"));
 
-	setTimeout(resetGame, 5 * 1000);
+	setTimeout(resetGame, 4 * 1000);
 }
 
 function wonGame() {
@@ -170,7 +170,7 @@ function wonGame() {
 		database.ref(`users/${currUsername}/wins`).set(newCount);
 	});
 
-	setTimeout(resetGame, 5 * 1000);
+	setTimeout(resetGame, 4 * 1000);
 }
 
 function lostGame() {
@@ -182,7 +182,7 @@ function lostGame() {
 		database.ref(`users/${currUsername}/losses`).set(newCount);
 	});
 
-	setTimeout(resetGame, 5 * 1000);
+	setTimeout(resetGame, 4 * 1000);
 }
 
 function resetGame() {
@@ -194,14 +194,14 @@ function resetGame() {
 function getUsername(el) {
 	addUsernameForm(el);
 
-	var playerNum = $(el).attr("data-player");
+	var player = $(el).attr("data-player");
 
 	joining = true;
-	currPlayer = playerNum;
+	currPlayer = player;
 
 	loadDisconnectMethods();
 
-	updateState(playerNum, "joining");
+	updateState(player, "joining");
 
 	$("#username-btn").click(usernameBtnClicked);
 
@@ -224,10 +224,14 @@ function getUsername(el) {
 	function usernameBtnClicked() {
 		var input = $("#username-input").val().trim();
 
+		var otherPlayer = $(".player-head").text();
+
 		if(input.length > 0) {
-			$(`#player${playerNum} > div`).empty();
+			if(otherPlayer === input) return;
+
+			$(`#${player} > div`).empty();
 			currUsername = input;
-			checkIfNewPlayer(input, playerNum);
+			checkIfNewPlayer(input, player);
 		}
 	}
 }

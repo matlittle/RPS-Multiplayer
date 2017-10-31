@@ -10,7 +10,7 @@
 	position: relative;
 }
 
-#background {
+body {
 	background-image: url("../images/background.jpg");
 	background-size: cover;
 	background-attachment: fixed;
@@ -31,11 +31,17 @@
 
 .player, #board {
 	width: 300px;
-	height: 400px;
+	height: 350px;
 	margin: auto;
 	text-align: center;
 	position: relative;
 	font-weight: 900;
+}
+
+#board > p {
+	padding-top: 50px;
+	font-size: 3em;
+	color: black;
 }
 
 #player1 {
@@ -57,7 +63,7 @@
 }
 
 .join-btn {
-	line-height: 350px;
+	line-height: 300px;
 	font-size: 2.5em;
 	margin: 0;
 	font-weight: 600;
@@ -68,7 +74,7 @@
 }
 
 #username-label {
-	margin-top: 75px;
+	margin-top: 60px;
 	font-size: 1.75em;
 	width: 200px;
 }
@@ -97,17 +103,18 @@
 }
 
 #chat-row {
-	margin: 40px auto 0;
+	margin: 10px auto 0;
 }
 
 #chat-area {
 	width: 100%;
 	height: 150px;
-	background-color: white;
+	background-image: url("../images/scroll.jpg");
+	color: black;
+	font-size: 1.5em;
 	resize: vertical;
 	overflow: auto;
 	padding: 2px;
-	border: 2px solid grey;
 }
 
 .chat-line {
@@ -116,10 +123,13 @@
 
 #chat-input-group {
 	width: 100%;
+	color: black;
+	font-size: 1.5em;
 }
 
 #chat-input {
 	width: 85%;
+	background-color: #f2cf8f;
 }
 
 #chat-input:focus {
@@ -128,10 +138,16 @@
 
 #chat-btn {
 	width: 15%;
+	background-color: #f2cf8f;
+}
+
+#chat-btn {
+	outline: none;
 }
 
 .chat-user {
 	font-style: italic;
+	text-decoration: underline;
 }
 
 .player-head {
@@ -139,11 +155,11 @@
 	margin: auto;
 	text-align: center;
 	font-size: 3em;
-	padding-top: 60px;
+	padding-top: 40px;
 }
 
 .choices {
-	width: 250px;
+	width: 210px;
 	margin: auto;
 	text-align: center;
 	font-size: 2em;
@@ -159,7 +175,7 @@
 	width: 250px;
 	height: 1.5em;
 	margin: auto;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 	font-size: 2em;
 }
 
