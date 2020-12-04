@@ -189,6 +189,10 @@ body {
 	padding: 0px;
 }
 
+.choice-item {
+	cursor: pointer;
+}
+
 .score {
 	position: relative;
 	width: 250px;
